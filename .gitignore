@@ -1,0 +1,90 @@
+# ============================================================
+# Spotify Clone — .gitignore
+# ============================================================
+
+# --- Environment / Secrets ---
+.env
+.env.local
+.env.production
+.env.staging
+*.env
+backend/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.production
+scripts/.env
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+*.cover
+*.log
+pip-log.txt
+pip-delete-this-directory.txt
+
+# --- Node / Frontend ---
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.next/
+frontend/build/
+.pnpm-store/
+.pnpm-debug.log
+
+# --- Vite ---
+*.local
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- IDEs ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+
+# --- Cloudflare / Wrangler ---
+.wrangler/
+wrangler-*.log
+
+# --- Render / Docker ---
+*.dockerignore
+
+# --- Logs ---
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Test artifacts ---
+.pytest_cache/
+test-results/
+coverage/
+*.xml
+
+# --- Misc ---
+*.bak
+*.tmp
+*.temp
+.cache/
