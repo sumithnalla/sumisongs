@@ -26,8 +26,13 @@ class SongResponse(BaseModel):
     album: Optional[str] = None
     genre: Optional[str] = None
     duration: float
-    audio_file_key: str
+    # Legacy fields (kept for backward compat / R2 future use)
+    audio_file_key: Optional[str] = None
     cover_image_key: Optional[str] = None
+    # Provider-neutral storage references (active for GridFS / local)
+    # Format: "gridfs-audio:<ObjectId>", "r2-audio:<key>", "local-audio:<path>"
+    storage_ref: Optional[str] = None
+    cover_storage_ref: Optional[str] = None
     uploaded_by: str
     created_at: datetime
     play_count: int

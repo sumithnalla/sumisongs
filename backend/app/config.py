@@ -33,6 +33,9 @@ class Settings(BaseSettings):
     # CORS
     allowed_origins: str = "http://localhost:5173"
 
+    # Storage provider: "gridfs" (active) | "r2" (future) | "local" (dev fallback)
+    storage_provider: str = "gridfs"
+
     # App
     environment: str = "development"
     max_audio_size_mb: int = 50
