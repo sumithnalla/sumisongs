@@ -60,17 +60,28 @@ Pushes commits to GitHub. `-u` sets `origin main` as the default so future pushe
 ```bash
 git add .
 ```
+Stages all newly created storage abstraction files (`backend/app/services/storage/*`), `migrate_songs_to_gridfs.py`, new tests `test_gridfs_storage.py`, and updated song routes/models.
 
 ### Commit
 ```bash
-git commit -m "feat: add GridFS storage provider, storage abstraction layer, reseed songs to GridFS"
+git commit -m "feat: add MongoDB GridFS storage provider, storage abstraction layer, migrate songs to GridFS"
 ```
+Committed as `a2ee0be`. 13 files changed, 1552 insertions(+), 111 deletions(-).
 
 ### Push
 ```bash
-git push
+git push origin main
 ```
-(Shorthand after `-u` is set in previous push)
+Pushed to `https://github.com/sumithnalla/sumisongs.git` on branch `main`.
+
+### Verification commands
+```bash
+# Run 40/40 test suite
+pytest tests/ -v
+
+# Run migration check
+python scripts/migrate_songs_to_gridfs.py
+```
 
 ---
 
