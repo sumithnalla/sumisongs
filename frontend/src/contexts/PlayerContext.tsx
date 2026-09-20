@@ -132,7 +132,8 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     try {
       // Set stream URL directly without waiting for extra network roundtrip
-      const directUrl = `/api/songs/${song.id}/audio`;
+      const apiBase = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
+      const directUrl = `${apiBase}/songs/${song.id}/audio`;
       audioRef.current.src = directUrl;
 
       // Note: Do NOT call audio.load() here as it causes AbortError in Chrome

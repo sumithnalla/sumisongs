@@ -1,0 +1,6 @@
+# Cloudflare Pages Redirects and Proxy Rules
+# Proxy all /api requests to the Render FastAPI backend
+/api/*  https://sumisongs-api.onrender.com/:splat  200
+
+# SPA client-side routing fallback
+/*      /index.html                               200

@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: spotify-clone-api
+    name: sumisongs-api
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
@@ -11,22 +11,14 @@ services:
         sync: false
       - key: MONGODB_DATABASE
         value: spotify_clone
+      - key: STORAGE_PROVIDER
+        value: gridfs
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRE_DAYS
         value: "7"
-      - key: R2_ACCOUNT_ID
-        sync: false
-      - key: R2_ACCESS_KEY_ID
-        sync: false
-      - key: R2_SECRET_ACCESS_KEY
-        sync: false
-      - key: R2_BUCKET_NAME
-        value: spotify-clone-media
-      - key: R2_ENDPOINT_URL
-        sync: false
       - key: ALLOWED_ORIGINS
-        sync: false
+        value: "https://sumisongs.pages.dev,http://localhost:5173"
       - key: ENVIRONMENT
         value: production
       - key: MAX_AUDIO_SIZE_MB

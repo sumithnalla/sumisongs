@@ -106,6 +106,36 @@ Pushes the audio fixes to `https://github.com/sumithnalla/sumisongs.git` on bran
 
 ---
 
+## Commit 4 — Cloudflare Pages deployment & production Render configuration
+
+### Create Cloudflare Pages Project
+```bash
+npx wrangler pages project create sumisongs --production-branch main --force
+```
+
+### Deploy Frontend Assets to Cloudflare Pages
+```bash
+npx wrangler pages deploy "frontend/dist" --project-name sumisongs --branch main
+```
+Deploys the production React bundle to `https://sumisongs.pages.dev/` with `_redirects` proxying `/api/*` to the Render backend.
+
+### Stage all changes
+```bash
+git add .
+```
+
+### Commit
+```bash
+git commit -m "feat: deploy frontend to Cloudflare Pages, configure _redirects proxy and render.yaml for GridFS"
+```
+
+### Push
+```bash
+git push origin main
+```
+
+---
+
 ## Useful Git Commands Reference
 
 ### See commit history
