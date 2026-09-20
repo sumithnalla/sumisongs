@@ -94,7 +94,7 @@ export const AdminDashboard: React.FC = () => {
       const created = await adminApi.createUser({
         username: newUsername.trim(),
         password: newPassword,
-        display_name: newDisplayName.trim() || newUsername.split('@')[0],
+        display_name: newDisplayName.trim() || (newUsername.includes('@') ? newUsername.split('@')[0] : newUsername.trim()),
         role: newRole,
       });
       setUsers((prev) => [created, ...prev]);

@@ -65,7 +65,7 @@ export const TopNav: React.FC = () => {
               <UserIcon className="w-4 h-4" />
             </div>
             <span className="text-sm font-semibold text-white max-w-[120px] truncate">
-              {user?.username.split('@')[0]}
+              {user?.display_name || (user?.username ? user.username.split('@')[0] : 'User')}
             </span>
             {isAdmin && (
               <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#1db954] text-black uppercase">
@@ -79,9 +79,11 @@ export const TopNav: React.FC = () => {
             <div className="absolute right-0 mt-2 w-56 rounded-lg bg-[#282828] border border-[#3e3e3e] shadow-2xl py-1 z-50">
               <div className="px-4 py-3 border-b border-[#3e3e3e]">
                 <p className="text-xs text-[#b3b3b3]">Signed in as</p>
-                <p className="text-sm font-semibold text-white truncate">{user?.username}</p>
+                <p className="text-sm font-semibold text-white truncate">
+                  {user?.username || user?.display_name || 'User'}
+                </p>
                 <span className="inline-block mt-1 text-[11px] px-2 py-0.5 rounded-full bg-[#1db954]/20 text-[#1db954] font-medium uppercase">
-                  {user?.role}
+                  {user?.role || 'user'}
                 </span>
               </div>
 
