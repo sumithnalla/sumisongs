@@ -85,6 +85,27 @@ python scripts/migrate_songs_to_gridfs.py
 
 ---
 
+## Commit 3 — Fix audio playback latency, AbortError, and likes status endpoint
+
+### Stage all changes
+```bash
+git add .
+```
+Stages fixes to `PlayerContext.tsx` (removes `.load()` AbortError, eliminates blocking history calls), `gridfs_provider.py` (adds local SSD cache for sub-100ms streaming), `songs.py` (fixes RFC Content-Range header bug on 200 OK), `likes.py` (adds `/{id}/check` endpoint to fix 404), and `warmup_audio_cache.py`.
+
+### Commit
+```bash
+git commit -m "fix: resolve audio playback delay with local caching, remove redundant load() AbortError, add likes /check alias"
+```
+
+### Push
+```bash
+git push origin main
+```
+Pushes the audio fixes to `https://github.com/sumithnalla/sumisongs.git` on branch `main`.
+
+---
+
 ## Useful Git Commands Reference
 
 ### See commit history

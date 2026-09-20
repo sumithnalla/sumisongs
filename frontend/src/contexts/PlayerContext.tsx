@@ -110,39 +110,41 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const playSong = async (song: Song, newQueue?: Song[]) => {
     if (!audioRef.current) return;
 
-    // Record history for previous song
-    await recordPlayHistory(false);
+    // Record history for previous song in background
+    recordPlayHistory(false).catch(() => {});
     secondsPlayedRef.current = 0;
     playStartRef.current = Date.now();
 
-    try {
-      // Get stream URL from backend
-      const { stream_url } = await songsApi.getStreamUrl(song.id);
-      
-      let finalUrl = stream_url;
-      // If relative URL returned (e.g. /api/songs/123/audio), make it absolute or relative to origin
-      if (stream_url.startsWith('/')) {
-        finalUrl = stream_url;
-      }
+    // Update state immediately for instant responsive UI
+    setCurrentSong(song);
+    setIsPlaying(true);
+    setProgress(0);
+    setDuration(song.duration || 0);
 
-      audioRef.current.src = finalUrl;
-      audioRef.current.load();
+    if (newQueue && newQueue.length > 0) {
+      setQueue(newQueue);
+      const idx = newQueue.findIndex((s) => s.id === song.id);
+      setQueueIndex(idx !== -1 ? idx : 0);
+    } else if (!queue.some((s) => s.id === song.id)) {
+      setQueue((prev) => [...prev, song]);
+      setQueueIndex(queue.length);
+    }
+
+    try {
+      // Set stream URL directly without waiting for extra network roundtrip
+      const directUrl = `/api/songs/${song.id}/audio`;
+      audioRef.current.src = directUrl;
+
+      // Note: Do NOT call audio.load() here as it causes AbortError in Chrome
       await audioRef.current.play();
 
-      setCurrentSong(song);
-      setIsPlaying(true);
-      setProgress(0);
-      setDuration(song.duration || 0);
-
-      if (newQueue && newQueue.length > 0) {
-        setQueue(newQueue);
-        const idx = newQueue.findIndex((s) => s.id === song.id);
-        setQueueIndex(idx !== -1 ? idx : 0);
-      } else if (!queue.some((s) => s.id === song.id)) {
-        setQueue((prev) => [...prev, song]);
-        setQueueIndex(queue.length);
+      // Background call to record play count on backend
+      songsApi.getStreamUrl(song.id).catch(() => {});
+    } catch (err: any) {
+      if (err.name === 'AbortError') {
+        // Play was superseded by a newer song click — completely normal in browser
+        return;
       }
-    } catch (err) {
       console.error('Error playing song:', err);
       setIsPlaying(false);
     }
@@ -157,8 +159,10 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } else {
       audioRef.current.play().then(() => {
         setIsPlaying(true);
-      }).catch((e) => {
-        console.error('Playback resume failed:', e);
+      }).catch((e: any) => {
+        if (e.name !== 'AbortError') {
+          console.error('Playback resume failed:', e);
+        }
       });
     }
   };

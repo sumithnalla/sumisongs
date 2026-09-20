@@ -80,9 +80,9 @@ export const Home: React.FC = () => {
         <div>
           <h2 className="text-xl font-bold text-white mb-4">Recently Played</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-            {recentlyPlayed.map((song) => (
+            {recentlyPlayed.map((song, idx) => (
               <div
-                key={song.id}
+                key={`${song.id}-${idx}`}
                 onClick={() => playSong(song, recentlyPlayed)}
                 className="group flex items-center gap-4 bg-[#242424]/70 hover:bg-[#2e2e2e] rounded-md overflow-hidden cursor-pointer transition-all shadow select-none"
               >

@@ -4,12 +4,13 @@ Stores audio and cover images in two GridFS buckets:
   - audio_files  (for MP3s)
   - cover_images (for album art)
 
-Implements proper HTTP Range streaming so the browser audio player can:
-  seek, scrub, pause/resume, play from any position.
+Includes high-performance local disk caching so audio streams instantly
+without repeated internet roundtrips to MongoDB Atlas.
 
-storage_ref format: "gridfs:<ObjectId_hex>"
+storage_ref format: "gridfs-audio:<ObjectId_hex>"
 """
 import logging
+from pathlib import Path
 from typing import AsyncGenerator, Optional, Tuple
 
 from bson import ObjectId
@@ -23,11 +24,15 @@ log = logging.getLogger(__name__)
 
 _PREFIX_AUDIO = "gridfs-audio:"
 _PREFIX_COVER = "gridfs-cover:"
-_CHUNK_SIZE = 65536  # 64 KB chunks — efficient without excessive memory use
+_CHUNK_SIZE = 131072  # 128 KB chunks for local disk streaming
+
+# Local cache directory for instant audio streaming
+CACHE_DIR = Path(__file__).resolve().parent.parent.parent.parent / "backend" / ".cache" / "audio"
+CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 
 class GridFSProvider(BaseStorageProvider):
-    """Active storage provider using MongoDB GridFS."""
+    """Active storage provider using MongoDB GridFS with local acceleration cache."""
 
     # ------------------------------------------------------------------ #
     # Upload                                                               #
@@ -45,9 +50,17 @@ class GridFSProvider(BaseStorageProvider):
             file_bytes,
             metadata={"content_type": content_type, "key": key},
         )
-        ref = f"{_PREFIX_AUDIO}{file_id}"
-        log.info("GridFS audio uploaded: %s → %s (%d bytes)", key, ref, len(file_bytes))
-        return ref
+        storage_ref = f"{_PREFIX_AUDIO}{file_id}"
+        
+        # Populate cache immediately so new upload plays with zero latency
+        try:
+            cache_file = CACHE_DIR / f"{file_id}.mp3"
+            cache_file.write_bytes(file_bytes)
+        except Exception as e:
+            log.warning("Could not write audio to cache: %s", e)
+
+        log.info("GridFS audio uploaded: %s (%d bytes)", storage_ref, len(file_bytes))
+        return storage_ref
 
     async def upload_cover(
         self,
@@ -61,12 +74,12 @@ class GridFSProvider(BaseStorageProvider):
             file_bytes,
             metadata={"content_type": content_type, "key": key},
         )
-        ref = f"{_PREFIX_COVER}{file_id}"
-        log.info("GridFS cover uploaded: %s → %s (%d bytes)", key, ref, len(file_bytes))
-        return ref
+        storage_ref = f"{_PREFIX_COVER}{file_id}"
+        log.info("GridFS cover uploaded: %s (%d bytes)", storage_ref, len(file_bytes))
+        return storage_ref
 
     # ------------------------------------------------------------------ #
-    # Stream (HTTP Range support)                                          #
+    # Stream audio (with HTTP Range request support & local disk cache)     #
     # ------------------------------------------------------------------ #
 
     async def stream_audio(
@@ -75,23 +88,33 @@ class GridFSProvider(BaseStorageProvider):
         range_header: Optional[str] = None,
     ) -> Tuple[AsyncGenerator[bytes, None], int, int, int, str]:
         """
-        Open GridFS audio and return a streaming generator + range metadata.
-
+        Stream audio with Range support.
+        Uses local disk cache for instant playback and seeks.
         Returns (generator, start, end, total_size, content_type)
         """
         file_id = self._parse_audio_ref(storage_ref)
-        bucket = get_audio_bucket()
+        cache_file = CACHE_DIR / f"{file_id}.mp3"
 
-        try:
-            grid_out = await bucket.open_download_stream(file_id)
-        except Exception as exc:
-            log.error("GridFS open failed for %s: %s", storage_ref, exc)
-            raise HTTPException(status_code=404, detail="Audio file not found in GridFS")
+        if not cache_file.exists():
+            bucket = get_audio_bucket()
+            try:
+                grid_out = await bucket.open_download_stream(file_id)
+            except Exception as exc:
+                log.error("GridFS open failed for %s: %s", storage_ref, exc)
+                raise HTTPException(status_code=404, detail="Audio file not found in GridFS")
 
-        total_size: int = grid_out.length
+            data = await grid_out.read()
+            try:
+                cache_file.write_bytes(data)
+            except Exception as e:
+                log.warning("Could not write audio cache: %s", e)
+            total_size = len(data)
+        else:
+            total_size = cache_file.stat().st_size
+
         content_type: str = "audio/mpeg"
 
-        # Parse Range header  (e.g. "bytes=0-65535")
+        # Parse Range header (e.g. "bytes=0-65535")
         start = 0
         end = total_size - 1
 
@@ -109,14 +132,16 @@ class GridFSProvider(BaseStorageProvider):
         end = max(start, min(end, total_size - 1))
 
         async def _generator() -> AsyncGenerator[bytes, None]:
-            grid_out.seek(start)
-            remaining = end - start + 1
-            while remaining > 0:
-                chunk = await grid_out.read(min(_CHUNK_SIZE, remaining))
-                if not chunk:
-                    break
-                remaining -= len(chunk)
-                yield chunk
+            with open(cache_file, "rb") as f:
+                f.seek(start)
+                remaining = end - start + 1
+                while remaining > 0:
+                    read_len = min(_CHUNK_SIZE, remaining)
+                    chunk = f.read(read_len)
+                    if not chunk:
+                        break
+                    remaining -= len(chunk)
+                    yield chunk
 
         return _generator(), start, end, total_size, content_type
 
@@ -149,6 +174,14 @@ class GridFSProvider(BaseStorageProvider):
         except HTTPException:
             log.warning("delete_audio: invalid ref ignored: %s", storage_ref)
             return True
+
+        # Remove from local cache
+        cache_file = CACHE_DIR / f"{file_id}.mp3"
+        if cache_file.exists():
+            try:
+                cache_file.unlink()
+            except Exception:
+                pass
 
         bucket = get_audio_bucket()
         try:
@@ -185,6 +218,9 @@ class GridFSProvider(BaseStorageProvider):
         try:
             if storage_ref.startswith(_PREFIX_AUDIO):
                 file_id = self._parse_audio_ref(storage_ref)
+                cache_file = CACHE_DIR / f"{file_id}.mp3"
+                if cache_file.exists():
+                    return True
                 bucket = get_audio_bucket()
             elif storage_ref.startswith(_PREFIX_COVER):
                 file_id = self._parse_cover_ref(storage_ref)

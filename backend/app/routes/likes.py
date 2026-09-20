@@ -72,6 +72,7 @@ async def unlike_song(song_id: str, current_user: CurrentUser):
         raise HTTPException(status_code=404, detail="Song not liked")
 
 
+@router.get("/{song_id}/check")
 @router.get("/{song_id}/status")
 async def get_like_status(song_id: str, current_user: CurrentUser):
     """Check if the current user has liked a specific song."""
@@ -82,4 +83,5 @@ async def get_like_status(song_id: str, current_user: CurrentUser):
         raise HTTPException(status_code=400, detail="Invalid song ID")
 
     liked = await db.likes.find_one({"user_id": current_user["_id"], "song_id": song_oid})
-    return {"liked": liked is not None, "song_id": song_id}
+    is_liked = liked is not None
+    return {"liked": is_liked, "is_liked": is_liked, "song_id": song_id}

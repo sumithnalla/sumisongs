@@ -280,12 +280,13 @@ async def stream_audio_file(song_id: str, request: Request):
     status_code = 206 if is_range else 200
 
     headers = {
-        "Content-Range": f"bytes {start}-{end}/{total_size}",
         "Accept-Ranges": "bytes",
         "Content-Length": str(content_length),
         "Content-Type": content_type,
-        "Cache-Control": "no-cache",
+        "Cache-Control": "public, max-age=86400",
     }
+    if is_range:
+        headers["Content-Range"] = f"bytes {start}-{end}/{total_size}"
 
     return StreamingResponse(
         generator,
