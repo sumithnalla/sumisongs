@@ -37,6 +37,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(true);
     try {
       const loggedInUser = await authApi.login(credentials);
+      if ((loggedInUser as any).access_token) {
+        localStorage.setItem('access_token', (loggedInUser as any).access_token);
+      }
       setUser(loggedInUser);
       return loggedInUser;
     } finally {
@@ -48,6 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await authApi.logout();
     } finally {
+      localStorage.removeItem('access_token');
       setUser(null);
     }
   };

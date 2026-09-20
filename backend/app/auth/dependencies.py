@@ -3,7 +3,7 @@ import logging
 from typing import Annotated
 
 from bson import ObjectId
-from fastapi import Cookie, Depends, HTTPException, status
+from fastapi import Cookie, Depends, Header, HTTPException, status
 from jose import JWTError
 
 from app.auth.jwt import decode_access_token
@@ -14,9 +14,10 @@ log = logging.getLogger(__name__)
 
 async def get_current_user(
     access_token: Annotated[str | None, Cookie()] = None,
+    authorization: Annotated[str | None, Header()] = None,
 ) -> dict:
     """
-    Dependency: extracts and validates JWT from HTTP-only cookie.
+    Dependency: extracts and validates JWT from HTTP-only cookie or Authorization header.
     Returns the user document from MongoDB.
     """
     credentials_exception = HTTPException(
@@ -24,11 +25,18 @@ async def get_current_user(
         detail="Not authenticated",
     )
 
-    if not access_token:
+    token = access_token
+    if not token and authorization:
+        if authorization.startswith("Bearer "):
+            token = authorization.split(" ", 1)[1].strip()
+        else:
+            token = authorization.strip()
+
+    if not token:
         raise credentials_exception
 
     try:
-        payload = decode_access_token(access_token)
+        payload = decode_access_token(token)
         user_id: str | None = payload.get("sub")
         if user_id is None:
             raise credentials_exception

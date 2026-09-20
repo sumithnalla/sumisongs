@@ -136,6 +136,27 @@ git push origin main
 
 ---
 
+## Commit 5 — Production auth hardening, Cloudflare _worker proxy, and dual Bearer/Cookie authentication
+
+### Stage all changes
+```bash
+git add backend/app/auth/dependencies.py backend/app/routes/auth.py frontend/public/_worker.js frontend/src/api/client.ts frontend/src/contexts/AuthContext.tsx frontend/src/pages/Login.tsx git_commands.md
+```
+Stages authentication hardening, dual Bearer/Cookie dependency resolution, axios interceptor, Cloudflare reverse-proxy edge router, and admin password alignment.
+
+### Commit
+```bash
+git commit -m "feat: add Cloudflare Pages _worker.js proxy, dual Bearer/Cookie auth, and admin password fallback"
+```
+
+### Push
+```bash
+git push origin main
+```
+Triggers automatic rebuild and redeployment of the FastAPI service on Render.
+
+---
+
 ## Useful Git Commands Reference
 
 ### See commit history

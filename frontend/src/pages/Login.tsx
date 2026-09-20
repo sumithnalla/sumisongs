@@ -120,7 +120,7 @@ export const Login: React.FC = () => {
 
             <button
               type="button"
-              onClick={() => fillCredentials('sumithofficial2@gmail.com', 'sumith0FF_1104')}
+              onClick={() => fillCredentials('sumithofficial2@gmail.com', 'SN06072006')}
               className="px-3 py-2 rounded-lg bg-[#242424] hover:bg-[#2d2d2d] text-xs font-medium text-[#e0e0e0] border border-[#333] transition-colors text-left"
             >
               <span className="block font-bold text-[#1db954]">Admin User</span>
