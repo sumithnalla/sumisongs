@@ -39,18 +39,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCreatePlaylist }) => {
   const navItemClass = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-4 px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-200 ${
       isActive
-        ? 'text-white bg-[#282828]'
-        : 'text-[#b3b3b3] hover:text-white hover:bg-[#1a1a1a]'
+        ? 'text-theme-primary bg-theme-card shadow-sm font-bold'
+        : 'text-theme-secondary hover:text-theme-primary hover:bg-theme-card/60'
     }`;
 
   return (
-    <aside className="w-64 bg-black flex flex-col h-full shrink-0 border-r border-[#222222] select-none">
+    <aside className="hidden md:flex w-64 bg-theme-base flex-col h-full shrink-0 border-r border-theme-subtle select-none">
       {/* App Logo */}
       <div className="p-6 flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
         <div className="w-10 h-10 rounded-full bg-[#1db954] flex items-center justify-center shadow-lg shadow-[#1db954]/20">
           <Music className="w-6 h-6 text-black fill-current" />
         </div>
-        <span className="text-xl font-bold tracking-tight text-white">Spotify</span>
+        <span className="text-xl font-bold tracking-tight text-theme-primary">Spotify</span>
       </div>
 
       {/* Main Navigation */}
@@ -72,13 +72,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCreatePlaylist }) => {
       {/* Secondary Navigation */}
       <div className="mt-6 px-3 space-y-1">
         <NavLink to="/liked" className={navItemClass}>
-          <div className="w-6 h-6 rounded bg-gradient-to-br from-indigo-600 to-purple-400 flex items-center justify-center">
+          <div className="w-6 h-6 rounded bg-gradient-to-br from-indigo-600 to-purple-400 flex items-center justify-center shadow-sm">
             <Heart className="w-3.5 h-3.5 text-white fill-white" />
           </div>
           <span>Liked Songs</span>
         </NavLink>
         <NavLink to="/history" className={navItemClass}>
-          <History className="w-5 h-5 text-[#b3b3b3]" />
+          <History className="w-5 h-5 text-theme-secondary" />
           <span>Listening History</span>
         </NavLink>
         <NavLink to="/upload" className={navItemClass}>
@@ -94,17 +94,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCreatePlaylist }) => {
         )}
       </div>
 
-      <div className="mx-4 my-4 border-t border-[#282828]" />
+      <div className="mx-4 my-4 border-t border-theme-subtle" />
 
       {/* Playlists Header */}
-      <div className="px-5 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#b3b3b3]">
+      <div className="px-5 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-theme-secondary">
         <span>Playlists</span>
         <button
           onClick={onCreatePlaylist}
           title="Create Playlist"
-          className="text-[#b3b3b3] hover:text-white transition-colors p-1"
+          className="text-theme-secondary hover:text-theme-primary transition-colors p-1"
         >
-          <PlusSquare className="w-4 h-4" />
+          <PlusSquare className="w-4 h-4 text-[#1db954]" />
         </button>
       </div>
 
@@ -117,8 +117,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCreatePlaylist }) => {
             className={({ isActive }) =>
               `block px-3 py-2 rounded text-sm truncate transition-colors ${
                 isActive
-                  ? 'text-white font-medium bg-[#1e1e1e]'
-                  : 'text-[#a7a7a7] hover:text-white'
+                  ? 'text-theme-primary font-bold bg-theme-card'
+                  : 'text-theme-secondary hover:text-theme-primary hover:bg-theme-card/50'
               }`
             }
           >
@@ -126,7 +126,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCreatePlaylist }) => {
           </NavLink>
         ))}
         {playlists.length === 0 && (
-          <div className="px-3 py-4 text-xs text-[#727272]">
+          <div className="px-3 py-4 text-xs text-theme-muted italic">
             No playlists yet. Click '+' to create one.
           </div>
         )}

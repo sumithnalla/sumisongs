@@ -1,9 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, User as UserIcon, LogOut, Shield, Upload } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  User as UserIcon,
+  LogOut,
+  Shield,
+  Upload,
+  Menu,
+  Music,
+} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { ThemeToggle } from './ThemeToggle';
 
-export const TopNav: React.FC = () => {
+interface TopNavProps {
+  onOpenMobileDrawer?: () => void;
+}
+
+export const TopNav: React.FC<TopNavProps> = ({ onOpenMobileDrawer }) => {
   const navigate = useNavigate();
   const { user, logout, isAdmin } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -26,30 +40,58 @@ export const TopNav: React.FC = () => {
   };
 
   return (
-    <header className="h-16 px-8 flex items-center justify-between bg-[#121212]/80 backdrop-blur-md sticky top-0 z-20 border-b border-[#222222]">
-      {/* Navigation history controls */}
-      <div className="flex items-center gap-3">
-        <button
-          onClick={() => navigate(-1)}
-          className="w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 flex items-center justify-center text-[#b3b3b3] hover:text-white transition-colors"
-          title="Go back"
+    <header className="h-16 px-4 sm:px-8 flex items-center justify-between bg-theme-nav backdrop-blur-md sticky top-0 z-20 border-b border-theme-subtle transition-colors select-none">
+      {/* Left controls: Mobile drawer toggle / Desktop arrows */}
+      <div className="flex items-center gap-2 sm:gap-3">
+        {onOpenMobileDrawer && (
+          <button
+            onClick={onOpenMobileDrawer}
+            className="md:hidden p-2 rounded-full text-theme-secondary hover:text-theme-primary hover:bg-theme-card transition-colors"
+            title="Open Menu"
+            aria-label="Open Menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        )}
+
+        {/* Mobile brand badge */}
+        <div
+          className="md:hidden flex items-center gap-2 cursor-pointer ml-1"
+          onClick={() => navigate('/')}
         >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-        <button
-          onClick={() => navigate(1)}
-          className="w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 flex items-center justify-center text-[#b3b3b3] hover:text-white transition-colors"
-          title="Go forward"
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
+          <div className="w-7 h-7 rounded-full bg-[#1db954] flex items-center justify-center shadow-sm">
+            <Music className="w-4 h-4 text-black fill-current" />
+          </div>
+          <span className="font-bold text-base tracking-tight text-theme-primary">Spotify</span>
+        </div>
+
+        {/* Desktop navigation history controls */}
+        <div className="hidden md:flex items-center gap-2">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-8 h-8 rounded-full bg-theme-card hover:bg-theme-card-hover flex items-center justify-center text-theme-secondary hover:text-theme-primary transition-colors border border-theme-subtle"
+            title="Go back"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => navigate(1)}
+            className="w-8 h-8 rounded-full bg-theme-card hover:bg-theme-card-hover flex items-center justify-center text-theme-secondary hover:text-theme-primary transition-colors border border-theme-subtle"
+            title="Go forward"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
-      {/* User Actions */}
-      <div className="flex items-center gap-4">
+      {/* Right User Actions */}
+      <div className="flex items-center gap-2.5 sm:gap-4">
+        {/* Dark / Light Mode Toggle */}
+        <ThemeToggle />
+
         <button
           onClick={() => navigate('/upload')}
-          className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-black bg-white hover:scale-105 active:scale-95 transition-all shadow"
+          className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-black bg-[#1db954] hover:scale-105 active:scale-95 transition-all shadow-md shadow-[#1db954]/20"
         >
           <Upload className="w-4 h-4" />
           <span>Upload</span>
@@ -59,16 +101,16 @@ export const TopNav: React.FC = () => {
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setMenuOpen((prev) => !prev)}
-            className="flex items-center gap-2.5 p-1.5 pr-3 rounded-full bg-black/70 hover:bg-[#282828] border border-[#333333] transition-all"
+            className="flex items-center gap-2 p-1.5 pr-2.5 sm:pr-3 rounded-full bg-theme-card hover:bg-theme-card-hover border border-theme-subtle transition-all shadow-sm"
           >
-            <div className="w-7 h-7 rounded-full bg-[#333333] flex items-center justify-center text-white">
+            <div className="w-7 h-7 rounded-full bg-[#1db954]/20 text-[#1db954] flex items-center justify-center font-bold">
               <UserIcon className="w-4 h-4" />
             </div>
-            <span className="text-sm font-semibold text-white max-w-[120px] truncate">
+            <span className="hidden sm:inline-block text-xs sm:text-sm font-semibold text-theme-primary max-w-[100px] sm:max-w-[120px] truncate">
               {user?.display_name || (user?.username ? user.username.split('@')[0] : 'User')}
             </span>
             {isAdmin && (
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#1db954] text-black uppercase">
+              <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#1db954] text-black uppercase">
                 Admin
               </span>
             )}
@@ -76,13 +118,13 @@ export const TopNav: React.FC = () => {
 
           {/* Dropdown Menu */}
           {menuOpen && (
-            <div className="absolute right-0 mt-2 w-56 rounded-lg bg-[#282828] border border-[#3e3e3e] shadow-2xl py-1 z-50">
-              <div className="px-4 py-3 border-b border-[#3e3e3e]">
-                <p className="text-xs text-[#b3b3b3]">Signed in as</p>
-                <p className="text-sm font-semibold text-white truncate">
+            <div className="absolute right-0 mt-2 w-56 rounded-xl bg-theme-surface border border-theme-medium shadow-2xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+              <div className="px-4 py-3 border-b border-theme-subtle">
+                <p className="text-xs text-theme-secondary">Signed in as</p>
+                <p className="text-sm font-semibold text-theme-primary truncate">
                   {user?.username || user?.display_name || 'User'}
                 </p>
-                <span className="inline-block mt-1 text-[11px] px-2 py-0.5 rounded-full bg-[#1db954]/20 text-[#1db954] font-medium uppercase">
+                <span className="inline-block mt-1 text-[11px] px-2 py-0.5 rounded-full bg-[#1db954]/20 text-[#1db954] font-semibold uppercase">
                   {user?.role || 'user'}
                 </span>
               </div>
@@ -93,7 +135,7 @@ export const TopNav: React.FC = () => {
                     setMenuOpen(false);
                     navigate('/admin');
                   }}
-                  className="w-full text-left px-4 py-2.5 text-sm text-[#e0e0e0] hover:bg-[#383838] flex items-center gap-2.5 transition-colors"
+                  className="w-full text-left px-4 py-2.5 text-sm text-theme-primary hover:bg-theme-card flex items-center gap-2.5 transition-colors"
                 >
                   <Shield className="w-4 h-4 text-[#1db954]" />
                   <span>Admin Console</span>
@@ -101,8 +143,19 @@ export const TopNav: React.FC = () => {
               )}
 
               <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate('/upload');
+                }}
+                className="md:hidden w-full text-left px-4 py-2.5 text-sm text-theme-primary hover:bg-theme-card flex items-center gap-2.5 transition-colors"
+              >
+                <Upload className="w-4 h-4 text-[#1db954]" />
+                <span>Upload Music</span>
+              </button>
+
+              <button
                 onClick={handleLogout}
-                className="w-full text-left px-4 py-2.5 text-sm text-[#ff6b6b] hover:bg-[#383838] flex items-center gap-2.5 transition-colors"
+                className="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-red-500/10 flex items-center gap-2.5 transition-colors"
               >
                 <LogOut className="w-4 h-4" />
                 <span>Log out</span>

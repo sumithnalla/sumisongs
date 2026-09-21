@@ -63,7 +63,7 @@ export const Search: React.FC = () => {
   };
 
   return (
-    <div className="p-8 space-y-8 pb-16">
+    <div className="p-4 sm:p-8 space-y-6 sm:space-y-8">
       {/* Search Input */}
       <div className="max-w-xl relative">
         <input
@@ -71,14 +71,14 @@ export const Search: React.FC = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="What do you want to play? (title, artist, genre...)"
-          className="w-full px-5 py-3.5 pl-12 pr-10 rounded-full bg-[#242424] text-white placeholder-[#777] border border-transparent focus:border-white focus:bg-[#2a2a2a] focus:outline-none text-sm transition-all shadow-lg"
+          className="w-full px-4 sm:px-5 py-3 sm:py-3.5 pl-11 sm:pl-12 pr-10 rounded-full bg-theme-card text-theme-primary placeholder-theme-muted border border-theme-subtle focus:border-[#1db954] focus:bg-theme-elevated focus:outline-none text-xs sm:text-sm transition-all shadow-md"
           autoFocus
         />
-        <SearchIcon className="w-5 h-5 text-[#999] absolute left-4 top-1/2 -translate-y-1/2" />
+        <SearchIcon className="w-5 h-5 text-theme-muted absolute left-3.5 sm:left-4 top-1/2 -translate-y-1/2" />
         {query && (
           <button
             onClick={() => setQuery('')}
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#999] hover:text-white p-1"
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-theme-muted hover:text-theme-primary p-1"
           >
             <X className="w-4 h-4" />
           </button>
@@ -88,7 +88,7 @@ export const Search: React.FC = () => {
       {/* Content: Results or Genre Browse */}
       {query.trim() ? (
         <div>
-          <h2 className="text-xl font-bold text-white mb-4">
+          <h2 className="text-lg sm:text-xl font-bold text-theme-primary mb-3 sm:mb-4">
             {loading ? 'Searching...' : `Search results for "${query}"`}
           </h2>
 
@@ -97,7 +97,7 @@ export const Search: React.FC = () => {
               <div className="w-8 h-8 border-4 border-[#1db954] border-t-transparent rounded-full animate-spin" />
             </div>
           ) : results.length > 0 ? (
-            <div className="bg-[#181818]/60 rounded-xl p-2 border border-[#222222]">
+            <div className="bg-theme-card/70 rounded-2xl p-2 sm:p-3 border border-theme-subtle shadow-sm">
               {results.map((song, idx) => (
                 <SongRow
                   key={song.id}
@@ -110,10 +110,10 @@ export const Search: React.FC = () => {
               ))}
             </div>
           ) : searched ? (
-            <div className="text-center py-16 text-[#888]">
-              <Music className="w-12 h-12 mx-auto mb-3 opacity-40" />
-              <p className="text-base font-semibold text-white">No results found for "{query}"</p>
-              <p className="text-xs text-[#888] mt-1">
+            <div className="text-center py-16 text-theme-muted">
+              <Music className="w-12 h-12 mx-auto mb-3 opacity-30 text-theme-muted" />
+              <p className="text-base font-semibold text-theme-primary">No results found for "{query}"</p>
+              <p className="text-xs text-theme-secondary mt-1">
                 Please make sure your words are spelled correctly or try different keywords.
               </p>
             </div>
@@ -121,16 +121,16 @@ export const Search: React.FC = () => {
         </div>
       ) : (
         <div>
-          <h2 className="text-xl font-bold text-white mb-4">Browse All Genres</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <h2 className="text-lg sm:text-xl font-bold text-theme-primary mb-3 sm:mb-4">Browse All Genres</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
             {GENRES.map((g) => (
               <div
                 key={g.name}
                 onClick={() => handleGenreClick(g.name)}
-                className={`h-36 rounded-xl bg-gradient-to-br ${g.color} p-4 cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg flex flex-col justify-between overflow-hidden relative select-none`}
+                className={`h-28 sm:h-36 rounded-2xl bg-gradient-to-br ${g.color} p-3.5 sm:p-4 cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all shadow-md flex flex-col justify-between overflow-hidden relative select-none`}
               >
-                <span className="text-xl font-bold text-white tracking-wide">{g.name}</span>
-                <Music className="w-16 h-16 text-white/20 absolute -right-2 -bottom-2 rotate-12" />
+                <span className="text-base sm:text-xl font-extrabold text-white tracking-wide">{g.name}</span>
+                <Music className="w-12 h-12 sm:w-16 sm:h-16 text-white/20 absolute -right-2 -bottom-2 rotate-12" />
               </div>
             ))}
           </div>

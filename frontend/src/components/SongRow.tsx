@@ -64,14 +64,14 @@ export const SongRow: React.FC<SongRowProps> = ({
   return (
     <div
       onClick={handlePlayClick}
-      className={`group flex items-center justify-between px-4 py-2.5 rounded-md hover:bg-[#282828] cursor-pointer transition-colors text-sm ${
-        isCurrent ? 'bg-[#202020]' : ''
+      className={`group flex items-center justify-between px-2 sm:px-4 py-2 sm:py-2.5 rounded-lg hover:bg-theme-card-hover cursor-pointer transition-colors text-sm border-b border-theme-subtle/50 ${
+        isCurrent ? 'bg-theme-card shadow-sm font-semibold' : ''
       }`}
     >
       {/* Left: Index & Play Button & Title */}
-      <div className="flex items-center gap-4 flex-1 min-w-0 pr-4">
+      <div className="flex items-center gap-2.5 sm:gap-4 flex-1 min-w-0 pr-2 sm:pr-4">
         {/* Index or Play icon */}
-        <div className="w-6 text-center text-xs text-[#b3b3b3] group-hover:hidden shrink-0">
+        <div className="w-5 sm:w-6 text-center text-xs text-theme-secondary group-hover:hidden shrink-0">
           {isCurrent && isPlaying ? (
             <div className="w-3.5 h-3.5 mx-auto flex items-end justify-between">
               <span className="w-0.5 bg-[#1db954] h-full animate-bounce" />
@@ -85,51 +85,53 @@ export const SongRow: React.FC<SongRowProps> = ({
 
         <button
           onClick={handlePlayClick}
-          className="w-6 hidden group-hover:flex items-center justify-center text-white shrink-0"
+          className="w-5 sm:w-6 hidden group-hover:flex items-center justify-center text-theme-primary shrink-0"
         >
           {isCurrent && isPlaying ? (
-            <Pause className="w-4 h-4 fill-white" />
+            <Pause className="w-4 h-4 fill-current" />
           ) : (
-            <Play className="w-4 h-4 fill-white ml-0.5" />
+            <Play className="w-4 h-4 fill-current ml-0.5" />
           )}
         </button>
 
         {/* Cover thumbnail */}
-        <div className="w-10 h-10 rounded bg-[#2a2a2a] shrink-0 overflow-hidden flex items-center justify-center">
+        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-md bg-theme-elevated shrink-0 overflow-hidden flex items-center justify-center border border-theme-subtle shadow-sm">
           {song.cover_url ? (
             <img src={song.cover_url} alt={song.title} className="w-full h-full object-cover" />
           ) : (
-            <Music className="w-5 h-5 text-[#888]" />
+            <Music className="w-4 h-4 sm:w-5 sm:h-5 text-theme-muted" />
           )}
         </div>
 
         {/* Title & Artist */}
         <div className="min-w-0 flex-1">
-          <p className={`font-semibold truncate ${isCurrent ? 'text-[#1db954]' : 'text-white'}`}>
+          <p className={`font-semibold text-xs sm:text-sm truncate ${isCurrent ? 'text-[#1db954]' : 'text-theme-primary'}`}>
             {song.title}
           </p>
-          <p className="text-xs text-[#b3b3b3] truncate">{song.artist}</p>
+          <p className="text-[11px] sm:text-xs text-theme-secondary truncate">{song.artist}</p>
         </div>
       </div>
 
       {/* Album */}
-      <div className="hidden md:block w-1/4 text-xs text-[#b3b3b3] truncate pr-4">
+      <div className="hidden md:block w-1/4 text-xs text-theme-secondary truncate pr-4">
         {song.album || 'Single'}
       </div>
 
       {/* Duration & Actions */}
-      <div className="flex items-center gap-3 shrink-0">
+      <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
         <button
           onClick={handleLikeClick}
           className={`p-1.5 transition-colors ${
-            isLiked ? 'text-[#1db954]' : 'text-transparent group-hover:text-[#b3b3b3] hover:text-white'
+            isLiked
+              ? 'text-[#1db954]'
+              : 'text-theme-muted group-hover:text-theme-secondary hover:text-theme-primary'
           }`}
           title={isLiked ? 'Unlike' : 'Like'}
         >
           <Heart className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
         </button>
 
-        <span className="text-xs text-[#b3b3b3] font-mono w-10 text-right">
+        <span className="text-[11px] sm:text-xs text-theme-secondary font-mono w-9 sm:w-10 text-right">
           {formatDuration(song.duration)}
         </span>
 
@@ -140,7 +142,7 @@ export const SongRow: React.FC<SongRowProps> = ({
               e.stopPropagation();
               setMenuOpen((prev) => !prev);
             }}
-            className="p-1 text-[#b3b3b3] hover:text-white rounded hover:bg-[#333] transition-colors"
+            className="p-1.5 text-theme-secondary hover:text-theme-primary rounded-lg hover:bg-theme-card transition-colors"
           >
             <MoreVertical className="w-4 h-4" />
           </button>
@@ -148,7 +150,7 @@ export const SongRow: React.FC<SongRowProps> = ({
           {menuOpen && (
             <div
               onClick={(e) => e.stopPropagation()}
-              className="absolute right-0 mt-1 w-48 rounded-lg bg-[#282828] border border-[#3e3e3e] shadow-xl py-1 z-50 text-xs"
+              className="absolute right-0 mt-1 w-44 rounded-xl bg-theme-surface border border-theme-medium shadow-2xl py-1 z-40 text-xs text-theme-primary animate-in fade-in zoom-in-95 duration-100"
             >
               {onAddToPlaylist && (
                 <button
@@ -156,9 +158,9 @@ export const SongRow: React.FC<SongRowProps> = ({
                     setMenuOpen(false);
                     onAddToPlaylist(song);
                   }}
-                  className="w-full text-left px-3 py-2 text-white hover:bg-[#383838] flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 hover:bg-theme-card flex items-center gap-2 text-theme-primary transition-colors"
                 >
-                  <Plus className="w-3.5 h-3.5" />
+                  <Plus className="w-3.5 h-3.5 text-[#1db954]" />
                   <span>Add to playlist</span>
                 </button>
               )}
@@ -169,7 +171,7 @@ export const SongRow: React.FC<SongRowProps> = ({
                     setMenuOpen(false);
                     onRemoveFromPlaylist(song.id);
                   }}
-                  className="w-full text-left px-3 py-2 text-[#ff6b6b] hover:bg-[#383838] flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 hover:bg-theme-card flex items-center gap-2 text-theme-secondary hover:text-theme-primary transition-colors"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Remove from playlist</span>
@@ -182,7 +184,7 @@ export const SongRow: React.FC<SongRowProps> = ({
                     setMenuOpen(false);
                     onDelete(song.id);
                   }}
-                  className="w-full text-left px-3 py-2 text-[#ff6b6b] hover:bg-[#383838] flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 hover:bg-red-500/10 text-red-500 flex items-center gap-2 transition-colors border-t border-theme-subtle"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Delete song</span>

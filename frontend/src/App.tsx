@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { PlayerProvider } from './contexts/PlayerContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { AppLayout } from './layouts/AppLayout';
 import { Login } from './pages/Login';
 import { Home } from './pages/Home';
@@ -46,41 +47,43 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; requireAdmin?: boole
 export const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <PlayerProvider>
-          <Routes>
-            <Route path="/login" element={<Login />} />
+      <ThemeProvider>
+        <AuthProvider>
+          <PlayerProvider>
+            <Routes>
+              <Route path="/login" element={<Login />} />
 
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <AppLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Home />} />
-              <Route path="search" element={<Search />} />
-              <Route path="library" element={<Library />} />
-              <Route path="liked" element={<LikedSongs />} />
-              <Route path="history" element={<History />} />
-              <Route path="playlist/:id" element={<PlaylistDetail />} />
-              <Route path="upload" element={<Upload />} />
               <Route
-                path="admin"
+                path="/"
                 element={
-                  <ProtectedRoute requireAdmin>
-                    <AdminDashboard />
+                  <ProtectedRoute>
+                    <AppLayout />
                   </ProtectedRoute>
                 }
-              />
-            </Route>
+              >
+                <Route index element={<Home />} />
+                <Route path="search" element={<Search />} />
+                <Route path="library" element={<Library />} />
+                <Route path="liked" element={<LikedSongs />} />
+                <Route path="history" element={<History />} />
+                <Route path="playlist/:id" element={<PlaylistDetail />} />
+                <Route path="upload" element={<Upload />} />
+                <Route
+                  path="admin"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <AdminDashboard />
+                    </ProtectedRoute>
+                  }
+                />
+              </Route>
 
-            {/* Catch-all */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </PlayerProvider>
-      </AuthProvider>
+              {/* Catch-all */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </PlayerProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 };

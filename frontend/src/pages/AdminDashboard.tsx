@@ -108,20 +108,20 @@ export const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <div className="p-8 space-y-8 pb-20">
+    <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 pb-24">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-[#1db954] mb-1">
-            <Shield className="w-5 h-5" />
-            <span className="text-xs font-bold uppercase tracking-wider">Administration Console</span>
+            <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider">Administration Console</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">System Overview</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-theme-primary tracking-tight">System Overview</h1>
         </div>
 
         <button
           onClick={() => setIsCreateOpen(true)}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#1db954] text-black font-bold text-xs uppercase tracking-wider hover:scale-105 active:scale-95 transition-all shadow"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#1db954] text-black font-bold text-xs uppercase tracking-wider hover:scale-105 active:scale-95 transition-all shadow-md"
         >
           <Plus className="w-4 h-4" />
           <span>Add New User</span>
@@ -130,44 +130,44 @@ export const AdminDashboard: React.FC = () => {
 
       {/* Stats Cards */}
       {stats && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="p-5 rounded-xl bg-[#181818] border border-[#282828] flex items-center gap-4 shadow">
-            <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">
-              <Users className="w-6 h-6" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="p-4 sm:p-5 rounded-2xl bg-theme-card border border-theme-subtle flex items-center gap-3.5 shadow-sm">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0">
+              <Users className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-xs text-[#b3b3b3] uppercase tracking-wider font-semibold">Users</p>
-              <p className="text-2xl font-black text-white">{stats.users}</p>
+              <p className="text-[10px] sm:text-xs text-theme-secondary uppercase tracking-wider font-semibold">Users</p>
+              <p className="text-xl sm:text-2xl font-black text-theme-primary">{stats.users}</p>
             </div>
           </div>
 
-          <div className="p-5 rounded-xl bg-[#181818] border border-[#282828] flex items-center gap-4 shadow">
-            <div className="w-12 h-12 rounded-lg bg-[#1db954]/10 flex items-center justify-center text-[#1db954]">
-              <Music className="w-6 h-6" />
+          <div className="p-4 sm:p-5 rounded-2xl bg-theme-card border border-theme-subtle flex items-center gap-3.5 shadow-sm">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#1db954]/10 flex items-center justify-center text-[#1db954] shrink-0">
+              <Music className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-xs text-[#b3b3b3] uppercase tracking-wider font-semibold">Songs</p>
-              <p className="text-2xl font-black text-white">{stats.songs}</p>
+              <p className="text-[10px] sm:text-xs text-theme-secondary uppercase tracking-wider font-semibold">Songs</p>
+              <p className="text-xl sm:text-2xl font-black text-theme-primary">{stats.songs}</p>
             </div>
           </div>
 
-          <div className="p-5 rounded-xl bg-[#181818] border border-[#282828] flex items-center gap-4 shadow">
-            <div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400">
-              <ListMusic className="w-6 h-6" />
+          <div className="p-4 sm:p-5 rounded-2xl bg-theme-card border border-theme-subtle flex items-center gap-3.5 shadow-sm">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 shrink-0">
+              <ListMusic className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-xs text-[#b3b3b3] uppercase tracking-wider font-semibold">Playlists</p>
-              <p className="text-2xl font-black text-white">{stats.playlists}</p>
+              <p className="text-[10px] sm:text-xs text-theme-secondary uppercase tracking-wider font-semibold">Playlists</p>
+              <p className="text-xl sm:text-2xl font-black text-theme-primary">{stats.playlists}</p>
             </div>
           </div>
 
-          <div className="p-5 rounded-xl bg-[#181818] border border-[#282828] flex items-center gap-4 shadow">
-            <div className="w-12 h-12 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-400">
-              <PlayCircle className="w-6 h-6" />
+          <div className="p-4 sm:p-5 rounded-2xl bg-theme-card border border-theme-subtle flex items-center gap-3.5 shadow-sm">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 shrink-0">
+              <PlayCircle className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <p className="text-xs text-[#b3b3b3] uppercase tracking-wider font-semibold">Total Plays</p>
-              <p className="text-2xl font-black text-white">{stats.total_plays}</p>
+              <p className="text-[10px] sm:text-xs text-theme-secondary uppercase tracking-wider font-semibold">Total Plays</p>
+              <p className="text-xl sm:text-2xl font-black text-theme-primary">{stats.total_plays}</p>
             </div>
           </div>
         </div>
@@ -175,30 +175,30 @@ export const AdminDashboard: React.FC = () => {
 
       {/* User Management Table */}
       <div>
-        <h2 className="text-xl font-bold text-white mb-4">User Accounts ({users.length})</h2>
-        <div className="bg-[#181818] rounded-xl border border-[#282828] overflow-hidden shadow-lg">
+        <h2 className="text-lg sm:text-xl font-bold text-theme-primary mb-3 sm:mb-4">User Accounts ({users.length})</h2>
+        <div className="bg-theme-card rounded-2xl border border-theme-subtle overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-[#b3b3b3]">
-              <thead className="bg-[#202020] text-xs uppercase font-semibold text-[#888] border-b border-[#282828]">
+            <table className="w-full text-left text-sm text-theme-secondary">
+              <thead className="bg-theme-elevated text-xs uppercase font-semibold text-theme-secondary border-b border-theme-subtle">
                 <tr>
-                  <th className="px-6 py-3.5">User</th>
-                  <th className="px-6 py-3.5">Role</th>
-                  <th className="px-6 py-3.5">Status</th>
-                  <th className="px-6 py-3.5">Created</th>
-                  <th className="px-6 py-3.5 text-right">Actions</th>
+                  <th className="px-4 sm:px-6 py-3.5">User</th>
+                  <th className="px-4 sm:px-6 py-3.5">Role</th>
+                  <th className="px-4 sm:px-6 py-3.5">Status</th>
+                  <th className="px-4 sm:px-6 py-3.5">Created</th>
+                  <th className="px-4 sm:px-6 py-3.5 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#242424]">
+              <tbody className="divide-y divide-theme-subtle">
                 {users.map((u) => {
                   const isSelf = u.id === currentUser?.id;
                   return (
-                    <tr key={u.id} className="hover:bg-[#222222] transition-colors">
-                      <td className="px-6 py-4">
-                        <p className="font-semibold text-white truncate max-w-xs">{u.username}</p>
-                        <p className="text-xs text-[#777]">{u.display_name || 'No display name'}</p>
+                    <tr key={u.id} className="hover:bg-theme-card-hover transition-colors">
+                      <td className="px-4 sm:px-6 py-4">
+                        <p className="font-semibold text-theme-primary truncate max-w-xs">{u.username}</p>
+                        <p className="text-xs text-theme-muted">{u.display_name || 'No display name'}</p>
                       </td>
 
-                      <td className="px-6 py-4">
+                      <td className="px-4 sm:px-6 py-4">
                         {isSelf ? (
                           <span className="text-xs font-bold text-[#1db954] uppercase bg-[#1db954]/10 px-2 py-0.5 rounded">
                             {u.role} (You)
@@ -207,7 +207,7 @@ export const AdminDashboard: React.FC = () => {
                           <select
                             value={u.role}
                             onChange={(e) => handleRoleChange(u, e.target.value as 'user' | 'admin')}
-                            className="bg-[#242424] text-white border border-[#383838] rounded px-2 py-1 text-xs focus:outline-none focus:border-[#1db954]"
+                            className="bg-theme-elevated text-theme-primary border border-theme-subtle rounded-lg px-2 py-1 text-xs focus:outline-none focus:border-[#1db954]"
                           >
                             <option value="user">User</option>
                             <option value="admin">Admin</option>

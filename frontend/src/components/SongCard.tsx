@@ -25,10 +25,10 @@ export const SongCard: React.FC<SongCardProps> = ({ song, allSongs }) => {
   return (
     <div
       onClick={handlePlay}
-      className="group p-4 rounded-lg bg-[#181818] hover:bg-[#282828] transition-all duration-300 cursor-pointer flex flex-col relative select-none"
+      className="group p-3 sm:p-4 rounded-xl bg-theme-card hover:bg-theme-card-hover border border-theme-subtle transition-all duration-200 cursor-pointer flex flex-col relative select-none shadow-sm active:scale-[0.98]"
     >
       {/* Cover Image Container */}
-      <div className="w-full aspect-square rounded-md bg-[#282828] mb-4 overflow-hidden relative shadow-lg flex items-center justify-center">
+      <div className="w-full aspect-square rounded-lg bg-theme-elevated mb-3 overflow-hidden relative shadow-md flex items-center justify-center">
         {song.cover_url ? (
           <img
             src={song.cover_url}
@@ -36,34 +36,34 @@ export const SongCard: React.FC<SongCardProps> = ({ song, allSongs }) => {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-[#333333] to-[#1e1e1e] flex items-center justify-center">
-            <Music className="w-12 h-12 text-[#666]" />
+          <div className="w-full h-full bg-theme-elevated flex items-center justify-center">
+            <Music className="w-10 h-10 text-theme-muted" />
           </div>
         )}
 
-        {/* Floating Play Button */}
+        {/* Floating Play Button (always visible on mobile touch or hover on desktop) */}
         <button
           onClick={handlePlay}
-          className={`absolute bottom-2 right-2 w-12 h-12 rounded-full bg-[#1db954] shadow-xl flex items-center justify-center text-black transition-all duration-300 hover:scale-110 active:scale-95 ${
+          className={`absolute bottom-2 right-2 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#1db954] shadow-xl flex items-center justify-center text-black transition-all duration-250 hover:scale-110 active:scale-95 ${
             isCurrent && isPlaying
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0'
+              ? 'opacity-100 translate-y-0 shadow-[#1db954]/40'
+              : 'opacity-90 sm:opacity-0 translate-y-0 sm:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0'
           }`}
           title={isCurrent && isPlaying ? 'Pause' : 'Play'}
         >
           {isCurrent && isPlaying ? (
-            <Pause className="w-6 h-6 fill-black" />
+            <Pause className="w-5 h-5 fill-black" />
           ) : (
-            <Play className="w-6 h-6 fill-black ml-0.5" />
+            <Play className="w-5 h-5 fill-black ml-0.5" />
           )}
         </button>
       </div>
 
       {/* Song Details */}
-      <h3 className={`font-bold text-sm truncate mb-1 ${isCurrent ? 'text-[#1db954]' : 'text-white'}`}>
+      <h3 className={`font-bold text-xs sm:text-sm truncate mb-0.5 ${isCurrent ? 'text-[#1db954]' : 'text-theme-primary'}`}>
         {song.title}
       </h3>
-      <p className="text-xs text-[#b3b3b3] truncate">{song.artist}</p>
+      <p className="text-[11px] sm:text-xs text-theme-secondary truncate">{song.artist}</p>
     </div>
   );
 };

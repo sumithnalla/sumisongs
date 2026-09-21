@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Music, Lock, Mail, AlertCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -39,18 +40,23 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-[#1e1e1e] via-[#121212] to-black flex flex-col items-center justify-center p-6 select-none">
+    <div className="min-h-screen w-full bg-theme-base flex flex-col items-center justify-center p-4 sm:p-6 select-none relative transition-colors duration-300">
+      {/* Theme Toggle Top Right */}
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+        <ThemeToggle />
+      </div>
+
       {/* Brand Header */}
-      <div className="flex items-center gap-3 mb-8 cursor-pointer">
+      <div className="flex items-center gap-3 mb-6 sm:mb-8">
         <div className="w-12 h-12 rounded-full bg-[#1db954] flex items-center justify-center shadow-xl shadow-[#1db954]/30">
           <Music className="w-7 h-7 text-black fill-current" />
         </div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-white">Spotify</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight text-theme-primary">Spotify</h1>
       </div>
 
       {/* Login Card */}
-      <div className="w-full max-w-md bg-[#181818] rounded-2xl border border-[#282828] shadow-2xl p-8 text-white">
-        <h2 className="text-2xl font-bold mb-6 text-center">Log in to continue</h2>
+      <div className="w-full max-w-md bg-theme-surface rounded-2xl border border-theme-subtle shadow-2xl p-6 sm:p-8 text-theme-primary transition-colors">
+        <h2 className="text-xl sm:text-2xl font-bold mb-6 text-center text-theme-primary">Log in to continue</h2>
 
         {error && (
           <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 flex items-center gap-3 text-red-400 text-sm">
@@ -61,7 +67,7 @@ export const Login: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-[#b3b3b3] uppercase tracking-wider mb-2">
+            <label className="block text-xs font-semibold text-theme-secondary uppercase tracking-wider mb-2">
               Email or Username
             </label>
             <div className="relative">
@@ -70,15 +76,15 @@ export const Login: React.FC = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="name@domain.com"
-                className="w-full px-4 py-3 pl-11 rounded-lg bg-[#242424] text-white placeholder-[#666] border border-[#333] focus:border-[#1db954] focus:outline-none text-sm transition-all"
+                className="w-full px-4 py-3 pl-11 rounded-lg bg-theme-elevated text-theme-primary placeholder-theme-muted border border-theme-subtle focus:border-[#1db954] focus:outline-none text-sm transition-all"
                 required
               />
-              <Mail className="w-5 h-5 text-[#888] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Mail className="w-5 h-5 text-theme-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#b3b3b3] uppercase tracking-wider mb-2">
+            <label className="block text-xs font-semibold text-theme-secondary uppercase tracking-wider mb-2">
               Password
             </label>
             <div className="relative">
@@ -87,10 +93,10 @@ export const Login: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full px-4 py-3 pl-11 rounded-lg bg-[#242424] text-white placeholder-[#666] border border-[#333] focus:border-[#1db954] focus:outline-none text-sm transition-all"
+                className="w-full px-4 py-3 pl-11 rounded-lg bg-theme-elevated text-theme-primary placeholder-theme-muted border border-theme-subtle focus:border-[#1db954] focus:outline-none text-sm transition-all"
                 required
               />
-              <Lock className="w-5 h-5 text-[#888] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Lock className="w-5 h-5 text-theme-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
             </div>
           </div>
 
@@ -104,27 +110,27 @@ export const Login: React.FC = () => {
         </form>
 
         {/* Fast-fill quick demo accounts */}
-        <div className="mt-8 pt-6 border-t border-[#282828]">
-          <p className="text-xs text-[#888] text-center mb-3 font-semibold uppercase tracking-wider">
+        <div className="mt-8 pt-6 border-t border-theme-subtle">
+          <p className="text-xs text-theme-muted text-center mb-3 font-semibold uppercase tracking-wider">
             Quick Fill Demo Accounts
           </p>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button
               type="button"
               onClick={() => fillCredentials('sumithnalla0607@gmail.com', 'SN06072006')}
-              className="px-3 py-2 rounded-lg bg-[#242424] hover:bg-[#2d2d2d] text-xs font-medium text-[#e0e0e0] border border-[#333] transition-colors text-left"
+              className="px-3 py-2.5 rounded-lg bg-theme-elevated hover:bg-theme-hover text-xs font-medium text-theme-primary border border-theme-subtle transition-colors text-left"
             >
-              <span className="block font-bold text-white">Standard User</span>
-              <span className="text-[10px] text-[#888] truncate block">sumithnalla0607...</span>
+              <span className="block font-bold text-theme-primary">Standard User</span>
+              <span className="text-[10px] text-theme-muted truncate block">sumithnalla0607...</span>
             </button>
 
             <button
               type="button"
               onClick={() => fillCredentials('sumithofficial2@gmail.com', 'SN06072006')}
-              className="px-3 py-2 rounded-lg bg-[#242424] hover:bg-[#2d2d2d] text-xs font-medium text-[#e0e0e0] border border-[#333] transition-colors text-left"
+              className="px-3 py-2.5 rounded-lg bg-theme-elevated hover:bg-theme-hover text-xs font-medium text-theme-primary border border-theme-subtle transition-colors text-left"
             >
               <span className="block font-bold text-[#1db954]">Admin User</span>
-              <span className="text-[10px] text-[#888] truncate block">sumithofficial2...</span>
+              <span className="text-[10px] text-theme-muted truncate block">sumithofficial2...</span>
             </button>
           </div>
         </div>
