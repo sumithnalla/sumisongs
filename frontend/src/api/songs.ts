@@ -45,4 +45,9 @@ export const songsApi = {
   deleteSong: async (id: string): Promise<void> => {
     await apiClient.delete(`/songs/${id}`);
   },
+
+  updateSong: async (id: string, data: Partial<Song>): Promise<Song> => {
+    const response = await apiClient.put<Song>(`/songs/${id}`, data);
+    return response.data;
+  },
 };

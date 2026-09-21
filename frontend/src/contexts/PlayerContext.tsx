@@ -30,6 +30,7 @@ interface PlayerContextType {
   addToQueue: (song: Song) => void;
   removeFromQueue: (index: number) => void;
   clearQueue: () => void;
+  updateCurrentSongMetadata: (updated: Partial<Song>) => void;
 }
 
 const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
@@ -283,6 +284,13 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setQueueIndex(0);
   };
 
+  const updateCurrentSongMetadata = (updated: Partial<Song>) => {
+    setCurrentSong((prev) => (prev && (!updated.id || prev.id === updated.id) ? { ...prev, ...updated } : prev));
+    setQueue((prevQueue) =>
+      prevQueue.map((item) => (item.id === updated.id ? { ...item, ...updated } : item))
+    );
+  };
+
   return (
     <PlayerContext.Provider
       value={{
@@ -310,6 +318,7 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         addToQueue,
         removeFromQueue,
         clearQueue,
+        updateCurrentSongMetadata,
       }}
     >
       {children}

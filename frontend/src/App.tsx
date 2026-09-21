@@ -11,6 +11,7 @@ import { Library } from './pages/Library';
 import { LikedSongs } from './pages/LikedSongs';
 import { History } from './pages/History';
 import { PlaylistDetail } from './pages/PlaylistDetail';
+import { SongDetail } from './pages/SongDetail';
 import { Upload } from './pages/Upload';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { Music } from 'lucide-react';
@@ -67,6 +68,8 @@ export const App: React.FC = () => {
                 <Route path="liked" element={<LikedSongs />} />
                 <Route path="history" element={<History />} />
                 <Route path="playlist/:id" element={<PlaylistDetail />} />
+                <Route path="song/:id" element={<SongDetail />} />
+                <Route path="track/:id" element={<SongDetail />} />
                 <Route path="upload" element={<Upload />} />
                 <Route
                   path="admin"

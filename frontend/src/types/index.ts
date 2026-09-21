@@ -20,6 +20,7 @@ export interface Song {
   audio_url: string;
   cover_url?: string;
   plays?: number;
+  play_count?: number;
   uploaded_by?: string;
   created_at?: string;
   is_liked?: boolean;

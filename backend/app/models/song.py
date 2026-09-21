@@ -16,6 +16,7 @@ class SongUpdate(BaseModel):
     artist: Optional[str] = Field(None, min_length=1, max_length=200)
     album: Optional[str] = Field(None, max_length=200)
     genre: Optional[str] = Field(None, max_length=100)
+    cover_url: Optional[str] = None
     is_public: Optional[bool] = None
 
 
