@@ -72,27 +72,42 @@ export const EditSongModal: React.FC<EditSongModalProps> = ({
 
       const updated = await songsApi.updateSong(song.id, payload);
 
-      // Also update player state in real time
-      updateCurrentSongMetadata({
-        id: song.id,
-        title: updated.title,
-        artist: updated.artist,
-        album: updated.album,
-        genre: updated.genre,
-        cover_url: updated.cover_url,
-      });
+      // Successfully saved to database
+      setSavedSuccess(true);
 
-      if (onUpdated) {
-        onUpdated(updated);
+      // Safe update of player state in real time
+      try {
+        updateCurrentSongMetadata({
+          id: song.id,
+          title: updated?.title || payload.title,
+          artist: updated?.artist || payload.artist,
+          album: updated?.album || payload.album,
+          genre: updated?.genre || payload.genre,
+          cover_url: updated?.cover_url || payload.cover_url,
+        });
+      } catch (playerErr) {
+        console.warn('Player metadata update warning:', playerErr);
       }
 
-      setSavedSuccess(true);
+      // Safe trigger of parent update callback
+      try {
+        if (onUpdated && updated) {
+          onUpdated(updated);
+        }
+      } catch (callbackErr) {
+        console.warn('Parent onUpdated warning:', callbackErr);
+      }
+
       setTimeout(() => {
         onClose();
-      }, 500);
+      }, 400);
     } catch (err: any) {
-      const msg = err.response?.data?.detail || 'Failed to update song details.';
-      setError(msg);
+      console.error('Error updating song:', err);
+      const msg =
+        err.response?.data?.detail ||
+        err.message ||
+        'Failed to update song details. Please try again.';
+      setError(typeof msg === 'string' ? msg : JSON.stringify(msg));
     } finally {
       setLoading(false);
     }

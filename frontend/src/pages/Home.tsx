@@ -116,7 +116,14 @@ export const Home: React.FC = () => {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
           {songs.slice(0, 12).map((song) => (
-            <SongCard key={song.id} song={song} allSongs={songs} />
+            <SongCard
+              key={song.id}
+              song={song}
+              allSongs={songs}
+              onSongUpdated={(updated) =>
+                setSongs((prev) => prev.map((s) => (s.id === updated.id ? updated : s)))
+              }
+            />
           ))}
         </div>
       </div>
@@ -145,6 +152,9 @@ export const Home: React.FC = () => {
                 allSongs={songs}
                 onDelete={handleDeleteSong}
                 onAddToPlaylist={openAddToPlaylist}
+                onSongUpdated={(updated) =>
+                  setSongs((prev) => prev.map((s) => (s.id === updated.id ? updated : s)))
+                }
               />
             ))}
           </div>

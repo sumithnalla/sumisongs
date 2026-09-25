@@ -285,10 +285,19 @@ export const PlayerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   const updateCurrentSongMetadata = (updated: Partial<Song>) => {
-    setCurrentSong((prev) => (prev && (!updated.id || prev.id === updated.id) ? { ...prev, ...updated } : prev));
-    setQueue((prevQueue) =>
-      prevQueue.map((item) => (item.id === updated.id ? { ...item, ...updated } : item))
-    );
+    if (!updated || !updated.id) return;
+    try {
+      setCurrentSong((prev) =>
+        prev && prev.id === updated.id ? { ...prev, ...updated } : prev
+      );
+      setQueue((prevQueue) =>
+        (prevQueue || []).map((item) =>
+          item && item.id === updated.id ? { ...item, ...updated } : item
+        )
+      );
+    } catch (err) {
+      console.warn('Could not update player metadata:', err);
+    }
   };
 
   return (
