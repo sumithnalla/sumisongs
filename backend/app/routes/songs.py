@@ -373,28 +373,33 @@ async def get_cover_image_file(song_id: str):
 @router.put("/{song_id}")
 async def update_song(song_id: str, updates: SongUpdate, current_user: CurrentUser):
     """Update song metadata (owner, admin, or authenticated user)."""
-    db = get_database()
     try:
-        oid = ObjectId(song_id)
-    except Exception:
-        raise HTTPException(status_code=404, detail="Song not found")
+        db = get_database()
+        try:
+            oid = ObjectId(song_id)
+        except Exception:
+            raise HTTPException(status_code=404, detail="Song not found")
 
-    song = await db.songs.find_one({"_id": oid})
-    if not song:
-        raise HTTPException(status_code=404, detail="Song not found")
+        song = await db.songs.find_one({"_id": oid})
+        if not song:
+            raise HTTPException(status_code=404, detail="Song not found")
 
-    is_owner = str(song.get("uploaded_by", "")) == str(current_user["_id"])
-    is_admin = current_user.get("role") == "admin"
-    # Allow owner, admin, or any authenticated user (for seed songs or user customisation)
-    # If explicitly restricted in production, only non-null owner can restrict:
-    # but for user empowerment in this music streaming app, allow authenticated users:
-    update_data = {k: v for k, v in updates.model_dump().items() if v is not None}
-    if update_data:
-        update_data["updated_at"] = datetime.now(timezone.utc)
-        await db.songs.update_one({"_id": oid}, {"$set": update_data})
+        update_data = {k: v for k, v in updates.model_dump().items() if v is not None}
+        if update_data:
+            update_data["updated_at"] = datetime.now(timezone.utc)
+            await db.songs.update_one({"_id": oid}, {"$set": update_data})
 
-    updated = await db.songs.find_one({"_id": oid})
-    return serialize_doc(updated)
+        updated = await db.songs.find_one({"_id": oid})
+        return serialize_doc(updated)
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        log.error("Error in update_song: %s", traceback.format_exc())
+        raise HTTPException(
+            status_code=500,
+            detail=f"Update failed: {str(e)}",
+        )
 
 
 # ---------------------------------------------------------------------------

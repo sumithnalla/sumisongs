@@ -5,7 +5,8 @@ import logging
 import sys
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
@@ -59,6 +60,16 @@ def create_app() -> FastAPI:
         allow_headers=["Content-Type", "Authorization", "Accept", "Cookie"],
         expose_headers=["Set-Cookie"],
     )
+
+    # ── Global exception handler ───────────────────────────
+    @app.exception_handler(Exception)
+    async def global_exception_handler(request: Request, exc: Exception):
+        import traceback
+        log.error("Unhandled exception on %s %s: %s", request.method, request.url, traceback.format_exc())
+        return JSONResponse(
+            status_code=500,
+            content={"detail": f"Internal error: {str(exc)}"},
+        )
 
     # ── Routes ─────────────────────────────────────────────
     app.include_router(auth.router)
