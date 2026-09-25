@@ -5,6 +5,7 @@ import { playlistsApi } from '../api/playlists';
 import { Playlist, Song } from '../types';
 import { SongRow } from '../components/SongRow';
 import { PlaylistModal } from '../components/PlaylistModal';
+import { LoadingScreen } from '../components/LoadingScreen';
 import { usePlayer } from '../contexts/PlayerContext';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -36,11 +37,7 @@ export const PlaylistDetail: React.FC = () => {
   }, [id]);
 
   if (loading) {
-    return (
-      <div className="p-8 flex justify-center items-center h-64">
-        <div className="w-8 h-8 border-4 border-[#1db954] border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
+    return <LoadingScreen fullScreen={false} message="Loading playlist..." />;
   }
 
   if (!playlist) {

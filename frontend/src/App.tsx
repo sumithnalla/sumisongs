@@ -14,7 +14,7 @@ import { PlaylistDetail } from './pages/PlaylistDetail';
 import { SongDetail } from './pages/SongDetail';
 import { Upload } from './pages/Upload';
 import { AdminDashboard } from './pages/AdminDashboard';
-import { Music } from 'lucide-react';
+import { LoadingScreen } from './components/LoadingScreen';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode; requireAdmin?: boolean }> = ({
   children,
@@ -24,14 +24,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; requireAdmin?: boole
   const location = useLocation();
 
   if (isLoading) {
-    return (
-      <div className="h-screen w-screen bg-black flex flex-col items-center justify-center gap-4 text-white">
-        <div className="w-16 h-16 rounded-full bg-[#1db954] flex items-center justify-center shadow-2xl shadow-[#1db954]/40 animate-pulse">
-          <Music className="w-8 h-8 text-black fill-current" />
-        </div>
-        <div className="w-8 h-8 border-4 border-[#1db954] border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
+    return <LoadingScreen message="Connecting to your music..." />;
   }
 
   if (!isAuthenticated) {

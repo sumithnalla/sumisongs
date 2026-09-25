@@ -26,7 +26,7 @@ log = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     """Startup and shutdown event handlers."""
     settings = get_settings()
-    log.info("Starting Spotify Clone Backend (environment: %s)", settings.environment)
+    log.info("Starting SumiSongs Backend (environment: %s)", settings.environment)
     await connect_to_mongo()
     yield
     log.info("Shutting down...")
@@ -38,7 +38,7 @@ def create_app() -> FastAPI:
     settings = get_settings()
 
     app = FastAPI(
-        title="Spotify Clone API",
+        title="SumiSongs API",
         version="1.0.0",
         description="Music streaming API — FastAPI + MongoDB + Cloudflare R2",
         lifespan=lifespan,
@@ -92,7 +92,7 @@ def create_app() -> FastAPI:
 
     @app.get("/")
     async def root():
-        return {"message": "Spotify Clone API", "version": "1.0.0", "docs": "/docs"}
+        return {"message": "SumiSongs API", "version": "1.0.0", "docs": "/docs"}
 
     return app
 

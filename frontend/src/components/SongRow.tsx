@@ -221,7 +221,7 @@ export const SongRow: React.FC<SongRowProps> = ({
             {menuOpen && (
               <div
                 onClick={(e) => e.stopPropagation()}
-                className="absolute right-0 mt-1 w-48 rounded-xl bg-theme-surface border border-theme-medium shadow-2xl py-1 z-40 text-xs text-theme-primary animate-in fade-in zoom-in-95 duration-100"
+                className="hidden sm:block absolute right-0 mt-1 w-48 rounded-xl bg-theme-surface border border-theme-medium shadow-2xl py-1 z-40 text-xs text-theme-primary animate-in fade-in zoom-in-95 duration-100"
               >
                 {/* Dedicated Song Screen */}
                 <button
@@ -293,6 +293,111 @@ export const SongRow: React.FC<SongRowProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Mobile Action Sheet for SongRow */}
+      {menuOpen && (
+        <div
+          className="sm:hidden fixed inset-0 z-50 flex flex-col justify-end bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={(e) => {
+            e.stopPropagation();
+            setMenuOpen(false);
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-theme-surface border-t border-theme-subtle rounded-t-2xl p-5 pb-8 space-y-4 animate-in slide-in-from-bottom duration-250 shadow-2xl"
+          >
+            {/* Grab Handle */}
+            <div className="w-10 h-1 bg-theme-medium rounded-full mx-auto -mt-1 mb-2" />
+
+            {/* Song Preview Header */}
+            <div className="flex items-center gap-3 pb-3 border-b border-theme-subtle">
+              <div className="w-12 h-12 rounded-lg bg-theme-elevated overflow-hidden shrink-0 flex items-center justify-center">
+                {songData.cover_url ? (
+                  <img src={songData.cover_url} alt={songData.title} className="w-full h-full object-cover" />
+                ) : (
+                  <Music className="w-6 h-6 text-theme-muted" />
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h4 className="font-bold text-sm text-theme-primary truncate">{songData.title}</h4>
+                <p className="text-xs text-theme-secondary truncate">{songData.artist}</p>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="space-y-1">
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate(`/song/${songData.id}`);
+                }}
+                className="w-full flex items-center gap-3.5 px-3 py-3 rounded-xl hover:bg-theme-card active:bg-theme-card text-sm font-medium text-theme-primary transition-colors text-left"
+              >
+                <ExternalLink className="w-5 h-5 text-sky-400" />
+                <span>View song screen</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  setEditModalOpen(true);
+                }}
+                className="w-full flex items-center gap-3.5 px-3 py-3 rounded-xl hover:bg-theme-card active:bg-theme-card text-sm font-medium text-theme-primary transition-colors text-left"
+              >
+                <Pencil className="w-5 h-5 text-amber-400" />
+                <span>Edit song details</span>
+              </button>
+
+              {onAddToPlaylist && (
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onAddToPlaylist(songData);
+                  }}
+                  className="w-full flex items-center gap-3.5 px-3 py-3 rounded-xl hover:bg-theme-card active:bg-theme-card text-sm font-medium text-theme-primary transition-colors text-left"
+                >
+                  <Plus className="w-5 h-5 text-[#1db954]" />
+                  <span>Add to playlist</span>
+                </button>
+              )}
+
+              {onRemoveFromPlaylist && (
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onRemoveFromPlaylist(songData.id);
+                  }}
+                  className="w-full flex items-center gap-3.5 px-3 py-3 rounded-xl hover:bg-theme-card active:bg-theme-card text-sm font-medium text-theme-secondary transition-colors text-left"
+                >
+                  <Trash2 className="w-5 h-5" />
+                  <span>Remove from playlist</span>
+                </button>
+              )}
+
+              {(isOwner || isAdmin) && onDelete && (
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onDelete(songData.id);
+                  }}
+                  className="w-full flex items-center gap-3.5 px-3 py-3 rounded-xl hover:bg-red-500/10 text-red-500 text-sm font-medium transition-colors text-left border-t border-theme-subtle mt-2 pt-3"
+                >
+                  <Trash2 className="w-5 h-5 text-red-500" />
+                  <span>Delete song</span>
+                </button>
+              )}
+            </div>
+
+            <button
+              onClick={() => setMenuOpen(false)}
+              className="w-full py-3 rounded-xl bg-theme-card hover:bg-theme-card-hover font-semibold text-xs text-theme-secondary uppercase tracking-wider transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Edit Modal */}
       <EditSongModal

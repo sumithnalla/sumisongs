@@ -4,6 +4,7 @@ import { Heart, Play, Music } from 'lucide-react';
 import { likesApi } from '../api/likes';
 import { Song } from '../types';
 import { SongRow } from '../components/SongRow';
+import { LoadingScreen } from '../components/LoadingScreen';
 import { usePlayer } from '../contexts/PlayerContext';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -31,11 +32,7 @@ export const LikedSongs: React.FC = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="p-8 flex justify-center items-center h-64">
-        <div className="w-8 h-8 border-4 border-[#1db954] border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
+    return <LoadingScreen fullScreen={false} message="Loading your liked songs..." />;
   }
 
   return (

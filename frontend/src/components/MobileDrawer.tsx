@@ -16,6 +16,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { playlistsApi } from '../api/playlists';
 import { Playlist } from '../types';
+import { Logo } from './Logo';
 
 interface MobileDrawerProps {
   isOpen: boolean;
@@ -72,12 +73,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
       <div className="relative w-4/5 max-w-xs bg-theme-surface h-full shadow-2xl flex flex-col z-10 border-r border-theme-subtle animate-in slide-in-from-left duration-200">
         {/* Header */}
         <div className="p-4 border-b border-theme-subtle flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-[#1db954] flex items-center justify-center shadow">
-              <Music className="w-5 h-5 text-black fill-current" />
-            </div>
-            <span className="font-bold text-lg text-theme-primary">Spotify</span>
-          </div>
+          <Logo size="sm" showText textSize="font-bold text-lg text-theme-primary" />
           <button
             onClick={onClose}
             className="p-1.5 rounded-full text-theme-secondary hover:text-theme-primary hover:bg-theme-card transition-colors"

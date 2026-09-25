@@ -24,6 +24,7 @@ import { Song } from '../types';
 import { usePlayer } from '../contexts/PlayerContext';
 import { SongRow } from '../components/SongRow';
 import { EditSongModal } from '../components/EditSongModal';
+import { LoadingScreen } from '../components/LoadingScreen';
 
 export const SongDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -114,12 +115,7 @@ export const SongDetail: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <div className="p-12 flex flex-col items-center justify-center h-80 gap-3">
-        <div className="w-10 h-10 border-4 border-[#1db954] border-t-transparent rounded-full animate-spin" />
-        <p className="text-xs text-theme-secondary font-medium">Loading song screen...</p>
-      </div>
-    );
+    return <LoadingScreen fullScreen={false} message="Loading song details..." />;
   }
 
   if (!song) {

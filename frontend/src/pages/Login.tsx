@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Music, Lock, Mail, AlertCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { Logo } from '../components/Logo';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -47,11 +48,8 @@ export const Login: React.FC = () => {
       </div>
 
       {/* Brand Header */}
-      <div className="flex items-center gap-3 mb-6 sm:mb-8">
-        <div className="w-12 h-12 rounded-full bg-[#1db954] flex items-center justify-center shadow-xl shadow-[#1db954]/30">
-          <Music className="w-7 h-7 text-black fill-current" />
-        </div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-theme-primary">Spotify</h1>
+      <div className="mb-6 sm:mb-8">
+        <Logo size="lg" showText textSize="text-3xl font-black tracking-tight" />
       </div>
 
       {/* Login Card */}

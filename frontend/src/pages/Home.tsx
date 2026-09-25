@@ -6,6 +6,7 @@ import { historyApi } from '../api/history';
 import { Song } from '../types';
 import { SongCard } from '../components/SongCard';
 import { SongRow } from '../components/SongRow';
+import { LoadingScreen } from '../components/LoadingScreen';
 import { usePlayer } from '../contexts/PlayerContext';
 
 export const Home: React.FC = () => {
@@ -52,11 +53,7 @@ export const Home: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <div className="p-8 flex items-center justify-center h-64">
-        <div className="w-8 h-8 border-4 border-[#1db954] border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
+    return <LoadingScreen fullScreen={false} message="Loading your tracks..." />;
   }
 
   return (
@@ -77,7 +74,8 @@ export const Home: React.FC = () => {
         )}
       </div>
 
-      {/* Quick Play Row / Recently Played */}
+      {/* Quick Play Row / Recently Played - Kept for future restoration per user request */}
+      {/*
       {recentlyPlayed.length > 0 && (
         <div>
           <h2 className="text-lg sm:text-xl font-bold text-theme-primary mb-3 sm:mb-4">
@@ -108,6 +106,7 @@ export const Home: React.FC = () => {
           </div>
         </div>
       )}
+      */}
 
       {/* Featured Songs Grid */}
       <div>

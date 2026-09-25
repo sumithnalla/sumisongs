@@ -4,6 +4,7 @@ import { History as HistoryIcon, Play, CheckCircle2, Music } from 'lucide-react'
 import { historyApi } from '../api/history';
 import { HistoryItem, Song } from '../types';
 import { usePlayer } from '../contexts/PlayerContext';
+import { LoadingScreen } from '../components/LoadingScreen';
 
 export const History: React.FC = () => {
   const { openAddToPlaylist } = useOutletContext<{ openAddToPlaylist: (song: Song) => void }>();
@@ -42,11 +43,7 @@ export const History: React.FC = () => {
   const allSongs = history.map((h) => h.song).filter(Boolean) as Song[];
 
   if (loading) {
-    return (
-      <div className="p-8 flex justify-center items-center h-64">
-        <div className="w-8 h-8 border-4 border-[#1db954] border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
+    return <LoadingScreen fullScreen={false} message="Loading your listen history..." />;
   }
 
   return (

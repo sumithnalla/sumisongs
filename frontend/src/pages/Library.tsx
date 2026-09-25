@@ -5,6 +5,7 @@ import { playlistsApi } from '../api/playlists';
 import { likesApi } from '../api/likes';
 import { Playlist } from '../types';
 import { PlaylistModal } from '../components/PlaylistModal';
+import { LoadingScreen } from '../components/LoadingScreen';
 
 export const Library: React.FC = () => {
   const navigate = useNavigate();
@@ -37,11 +38,7 @@ export const Library: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <div className="p-8 flex justify-center items-center h-64">
-        <div className="w-8 h-8 border-4 border-[#1db954] border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
+    return <LoadingScreen fullScreen={false} message="Loading your library..." />;
   }
 
   return (

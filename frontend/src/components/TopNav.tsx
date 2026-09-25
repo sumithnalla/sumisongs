@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { ThemeToggle } from './ThemeToggle';
+import { Logo } from './Logo';
 
 interface TopNavProps {
   onOpenMobileDrawer?: () => void;
@@ -56,13 +57,10 @@ export const TopNav: React.FC<TopNavProps> = ({ onOpenMobileDrawer }) => {
 
         {/* Mobile brand badge */}
         <div
-          className="md:hidden flex items-center gap-2 cursor-pointer ml-1"
+          className="md:hidden flex items-center cursor-pointer ml-1"
           onClick={() => navigate('/')}
         >
-          <div className="w-7 h-7 rounded-full bg-[#1db954] flex items-center justify-center shadow-sm">
-            <Music className="w-4 h-4 text-black fill-current" />
-          </div>
-          <span className="font-bold text-base tracking-tight text-theme-primary">Spotify</span>
+          <Logo size="sm" showText textSize="font-bold text-base tracking-tight text-theme-primary" />
         </div>
 
         {/* Desktop navigation history controls */}
@@ -101,16 +99,17 @@ export const TopNav: React.FC<TopNavProps> = ({ onOpenMobileDrawer }) => {
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setMenuOpen((prev) => !prev)}
-            className="flex items-center gap-2 p-1.5 pr-2.5 sm:pr-3 rounded-full bg-theme-card hover:bg-theme-card-hover border border-theme-subtle transition-all shadow-sm"
+            className="flex items-center justify-center w-9 h-9 sm:w-auto sm:h-9 sm:px-2.5 rounded-full bg-theme-card hover:bg-theme-card-hover border border-theme-subtle transition-all shadow-sm active:scale-95"
+            aria-label="User profile options"
           >
-            <div className="w-7 h-7 rounded-full bg-[#1db954]/20 text-[#1db954] flex items-center justify-center font-bold">
+            <div className="w-7 h-7 rounded-full bg-[#1db954]/20 text-[#1db954] flex items-center justify-center font-bold shrink-0">
               <UserIcon className="w-4 h-4" />
             </div>
-            <span className="hidden sm:inline-block text-xs sm:text-sm font-semibold text-theme-primary max-w-[100px] sm:max-w-[120px] truncate">
+            <span className="hidden sm:inline-block ml-2 text-xs sm:text-sm font-semibold text-theme-primary max-w-[100px] sm:max-w-[120px] truncate">
               {user?.display_name || (user?.username ? user.username.split('@')[0] : 'User')}
             </span>
             {isAdmin && (
-              <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#1db954] text-black uppercase">
+              <span className="hidden sm:inline-block ml-1.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#1db954] text-black uppercase shrink-0">
                 Admin
               </span>
             )}

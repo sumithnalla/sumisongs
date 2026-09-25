@@ -14,6 +14,7 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import { playlistsApi } from '../api/playlists';
 import { Playlist } from '../types';
+import { Logo } from './Logo';
 
 interface SidebarProps {
   onCreatePlaylist: () => void;
@@ -46,11 +47,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCreatePlaylist }) => {
   return (
     <aside className="hidden md:flex w-64 bg-theme-base flex-col h-full shrink-0 border-r border-theme-subtle select-none">
       {/* App Logo */}
-      <div className="p-6 flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-        <div className="w-10 h-10 rounded-full bg-[#1db954] flex items-center justify-center shadow-lg shadow-[#1db954]/20">
-          <Music className="w-6 h-6 text-black fill-current" />
-        </div>
-        <span className="text-xl font-bold tracking-tight text-theme-primary">Spotify</span>
+      <div className="p-6 cursor-pointer" onClick={() => navigate('/')}>
+        <Logo size="lg" showText textSize="text-xl font-extrabold tracking-tight" />
       </div>
 
       {/* Main Navigation */}
