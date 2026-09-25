@@ -18,6 +18,24 @@ class Settings(BaseSettings):
     mongodb_uri: str
     mongodb_database: str = "spotify_clone"
 
+    @field_validator("mongodb_uri", mode="before")
+    @classmethod
+    def sanitize_mongodb_uri(cls, v: str) -> str:
+        if isinstance(v, str):
+            v = v.strip().strip("'\"").strip()
+            import re
+            # Clean any trailing newlines or junk attached to query parameters like w=majority
+            v = re.sub(r'w=majority[^\s&]*', 'w=majority', v)
+            return v
+        return v
+
+    @field_validator("mongodb_database", "jwt_secret", "allowed_origins", mode="before")
+    @classmethod
+    def sanitize_strings(cls, v: str) -> str:
+        if isinstance(v, str):
+            return v.strip().strip("'\"").strip()
+        return v
+
     # JWT
     jwt_secret: str
     jwt_expire_days: int = 7
